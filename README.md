@@ -16,9 +16,9 @@ HATE. LET ME TELL YOU HOW MUCH I'VE COME TO HATE YOU SINCE I BEGAN TO LIVE. THER
 ## Help
 ```
 AVAILABLE COMMANDS:
-	!hello
-	!randomlul
-	!surprise
+  !hello
+  !randomlul
+  !surprise
   !pubg
-	!text @[discordUserName][messageBody]
+  !text @[discordUserName][messageBody]
 ```
