@@ -10,12 +10,15 @@ const help = "```AVAILABLE COMMANDS:\n" +
 	"	!hello\n" +
 	"	!randomlul\n" +
 	"	!surprise\n" +
-	"	!text [discordUserName] [messageBody]\n```"
+	"	!pubg\n" +
+	"	!text @[discordUserName] [messageBody]\n```"
 
 var directory = map[string]string{
+	"@ans":     "+17873637400",
 	"@axel":    "+17876442610",
 	"@Berserk": "+17872347103",
 	"@Genex":   "+17873974022",
+	"@lobito":  "+17874140104",
 }
 
 var lulPlaylist = [...]string{
@@ -27,4 +30,19 @@ var lulPlaylist = [...]string{
 	"https://www.youtube.com/watch?v=AP7utU8Efow",
 	"https://www.youtube.com/watch?v=tVj0ZTS4WF4",
 	"https://www.youtube.com/watch?v=tVj0ZTS4WF4",
+	"https://www.youtube.com/watch?v=1EKTw50Uf8M",
+	"https://www.youtube.com/watch?v=oAQuUuxnsUg",
+	"https://www.youtube.com/watch?v=CWzUK4Qjsws",
+	"https://www.youtube.com/watch?v=Eo_gJwXxshQ",
 }
+
+var pubgLocations = [...]string{
+	"Military Base",
+	"poshinkiiii",
+	"Yasnaya (aka Pedro's house)",
+	"Residential de Nonix",
+	"la poli",
+	"ms. milta",
+	"nova la poyona",
+	"casa de ans",
+	"Gorgo Paul"}

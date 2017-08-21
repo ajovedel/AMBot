@@ -55,12 +55,18 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
+	fmt.Printf("Message received: %s\n", m.ContentWithMentionsReplaced())
+
 	// check message and reply/react to message
 	if strings.Contains(m.Content, "hello") {
 		s.ChannelMessageSend(m.ChannelID, am)
 
 	} else if strings.Contains(m.Content, "!help") {
 		s.ChannelMessageSend(m.ChannelID, help)
+
+	} else if strings.Contains(m.Content, "!pubg") {
+		rand.Seed(time.Now().Unix())
+		s.ChannelMessageSend(m.ChannelID, pubgLocations[rand.Intn(len(pubgLocations))])
 
 	} else if strings.Contains(m.Content, "axel") && strings.Contains(m.Content, "awesome") {
 		err = s.MessageReactionAdd(msgChannel.ID, m.ID, "👍")
@@ -88,7 +94,6 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		splitContent := strings.Fields(m.Message.ContentWithMentionsReplaced())
 		user := splitContent[2]
 		smsMsg := strings.SplitAfterN(m.Message.ContentWithMentionsReplaced(), " ", 4)
-		//smsMsg := splitContent[3:]
 		fmt.Printf("msg is: %s\n", m.Message.ContentWithMentionsReplaced())
 		fmt.Printf("User is: %s\n", user)
 		fmt.Printf("msg is: %s\n", smsMsg[len(smsMsg)-1])

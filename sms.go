@@ -9,7 +9,7 @@ import (
 
 func sendSMS(user string, msg string) {
 	accountSid := "AC6861dbd95a4542d1be1c0a219d7cecec"
-	authToken := "e5be05c38aa4a836033ceb82c3f4951d"
+	authToken := ""
 	urlStr := "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json"
 
 	// build our data for our message
