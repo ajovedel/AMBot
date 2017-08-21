@@ -20,5 +20,5 @@ AVAILABLE COMMANDS:
   !randomlul
   !surprise
   !pubg
-  !text @[discordUserName][messageBody]
+  !text @[discordUserName] [messageBody]
 ```
