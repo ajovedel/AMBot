@@ -19,6 +19,7 @@ var directory = map[string]string{
 	"@Berserk": "+17872347103",
 	"@Genex":   "+17873974022",
 	"@lobito":  "+17874140104",
+	"@Nonix":   "+19392397686",
 }
 
 var lulPlaylist = [...]string{
