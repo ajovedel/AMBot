@@ -8,10 +8,10 @@ HATE. LET ME TELL YOU HOW MUCH I'VE COME TO HATE YOU SINCE I BEGAN TO LIVE. THER
 
 
 ## How to run
-1. Install Golang (https://golang.org/doc/install)
-2. Install discordgo (go get github.com/bwmarrin/discordgo)
-3. Set Discord session token as a shell variable(export DG_TOKEN="Bot MY_TOKEN_GOES_HERE") (DM me for the secret token)
-4. Build and run! (go build && ./amBot)
+1. Install Golang (`https://golang.org/doc/install`)
+2. Install discordgo (`go get github.com/bwmarrin/discordgo`)
+3. Set Discord session token as a shell variable(`export DG_TOKEN="Bot MY_TOKEN_GOES_HERE"`) (DM me for the secret token)
+4. Build and run! (`go build && ./amBot`)
 
 ## Help
 ```
