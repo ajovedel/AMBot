@@ -15,7 +15,7 @@ const help = "```AVAILABLE COMMANDS:\n" +
 	"	!text @[discordUserName] [messageBody]\n```"
 
 var directory = map[string]string{
-	"@ans":     "+17873637400",
+	"@Ans":     "+17873637400",
 	"@axel":    "+17876442610",
 	"@Berserk": "+17872347103",
 	"@Genex":   "+17873974022",
