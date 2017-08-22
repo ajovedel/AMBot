@@ -76,7 +76,7 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 		defer f.Close()
 
-		if _, err = f.WriteString(m.ContentWithMentionsReplaced()); err != nil {
+		if _, err = f.WriteString(m.ContentWithMentionsReplaced() + "\n"); err != nil {
 			fmt.Printf("ERR is %s", err)
 		}
 		s.ChannelMessageSend(m.ChannelID, "Request has been logged and will be reviewed.")
