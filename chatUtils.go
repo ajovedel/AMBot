@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"os"
 	"strings"
 	"time"
 
@@ -67,6 +68,18 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 	} else if strings.Contains(m.Content, "!pubg") {
 		rand.Seed(time.Now().Unix())
 		s.ChannelMessageSend(m.ChannelID, pubgLocations[rand.Intn(len(pubgLocations))])
+
+	} else if strings.Contains(m.Content, "!request") {
+		f, err := os.OpenFile("requests.log", os.O_APPEND|os.O_WRONLY, 0600)
+		if err != nil {
+			fmt.Printf("ERR is %s", err)
+		}
+		defer f.Close()
+
+		if _, err = f.WriteString(m.ContentWithMentionsReplaced()); err != nil {
+			fmt.Printf("ERR is %s", err)
+		}
+		s.ChannelMessageSend(m.ChannelID, "Request has been logged and will be reviewed.")
 
 	} else if strings.Contains(m.Content, "axel") && strings.Contains(m.Content, "awesome") {
 		err = s.MessageReactionAdd(msgChannel.ID, m.ID, "👍")

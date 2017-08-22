@@ -11,6 +11,7 @@ const help = "```AVAILABLE COMMANDS:\n" +
 	"	!randomlul\n" +
 	"	!surprise\n" +
 	"	!pubg\n" +
+	" !request [yourRequest]\n" +
 	"	!text @[discordUserName] [messageBody]\n```"
 
 var directory = map[string]string{
@@ -27,7 +28,7 @@ var lulPlaylist = [...]string{
 	"https://www.youtube.com/watch?v=iq_d8VSM0nw",
 	"https://www.youtube.com/watch?v=ygI-2F8ApUM",
 	"https://www.youtube.com/watch?v=5-2nByd2cr4",
-	"https://www.youtube.com/watch?v=PeihcfYft9w&",
+	"https://www.youtube.com/watch?v=PeihcfYft9w",
 	"https://www.youtube.com/watch?v=AP7utU8Efow",
 	"https://www.youtube.com/watch?v=tVj0ZTS4WF4",
 	"https://www.youtube.com/watch?v=tVj0ZTS4WF4",
@@ -35,11 +36,16 @@ var lulPlaylist = [...]string{
 	"https://www.youtube.com/watch?v=oAQuUuxnsUg",
 	"https://www.youtube.com/watch?v=CWzUK4Qjsws",
 	"https://www.youtube.com/watch?v=Eo_gJwXxshQ",
+	"https://www.youtube.com/watch?v=5eveNk3o1ME",
+	"https://www.youtube.com/watch?v=_pqGNSXC9to",
+	"https://www.youtube.com/watch?v=ZZ5LpwO-An4",
+	"https://www.youtube.com/watch?v=_5fQZhv0poU",
+	"https://www.youtube.com/watch?v=0tdyU_gW6WE",
 }
 
 var pubgLocations = [...]string{
 	"Military Base",
-	"poshinkiiii",
+	"alturas de torrimar",
 	"Yasnaya (aka Pedro's house)",
 	"Residential de Nonix",
 	"la poli",
