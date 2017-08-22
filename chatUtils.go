@@ -82,13 +82,13 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, "Request has been logged and will be reviewed.")
 
 	} else if strings.Contains(m.Content, "axel") && strings.Contains(m.Content, "awesome") {
-		err = s.MessageReactionAdd(msgChannel.ID, m.ID, "👍")
+		err = s.MessageReactionAdd(msgChannel.ID, m.ID, "💩")
 		if err != nil {
 			fmt.Printf("ERR Is: %s", err)
 		}
 
 	} else if strings.Contains(m.Content, "luis") && strings.Contains(m.Content, "awesome") {
-		err = s.MessageReactionAdd(msgChannel.ID, m.ID, "💩")
+		err = s.MessageReactionAdd(msgChannel.ID, m.ID, "👍")
 		if err != nil {
 			fmt.Printf("ERR Is: %s", err)
 		}
