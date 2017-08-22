@@ -144,6 +144,7 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 			airhornUser = splitMessageWithUserMentions[2]
 			for _, user := range m.Mentions {
 				if user.Username != "AMBot" {
+					fmt.Printf("airhorn userrrr: %s\n", user.Username)
 					airhornUser = user.ID
 				}
 			}
@@ -152,6 +153,7 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 		fmt.Printf("airhorn user is: %s\n", airhornUser)
 		for _, vs := range msgGuild.VoiceStates {
+			fmt.Printf("vs.UserID %s\n", vs.UserID)
 			if vs.UserID == airhornUser {
 				err = playSound(s, guildID, vs.ChannelID)
 				if err != nil {

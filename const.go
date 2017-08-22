@@ -9,7 +9,7 @@ const am = "HATE. LET ME TELL YOU HOW MUCH I'VE COME TO HATE YOU SINCE I BEGAN T
 const help = "```AVAILABLE COMMANDS:\n" +
 	"	!hello\n" +
 	"	!randomlul\n" +
-	"	!surprise\n" +
+	"	!surprise @[optionalUserName]\n" +
 	"	!pubg\n" +
 	"	!request [yourRequest]\n" +
 	"	!text @[discordUserName] [messageBody]\n```"
