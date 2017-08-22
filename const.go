@@ -11,7 +11,7 @@ const help = "```AVAILABLE COMMANDS:\n" +
 	"	!randomlul\n" +
 	"	!surprise\n" +
 	"	!pubg\n" +
-	" !request [yourRequest]\n" +
+	"	!request [yourRequest]\n" +
 	"	!text @[discordUserName] [messageBody]\n```"
 
 var directory = map[string]string{
