@@ -7,16 +7,20 @@ import (
 	"strings"
 )
 
-func sendSMS(user string, msg string) {
+func sendSMS(user string, msg string) bool {
 	accountSid := "AC6861dbd95a4542d1be1c0a219d7cecec"
-	authToken := ""
+	authToken := "aeea5ce51e05ecc47c4e2c7e87b0a8b6"
 	urlStr := "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json"
+
+	// check if user exists in our directory
+	if _, ok := directory[user]; !ok {
+		fmt.Printf("User %s not found\n", user)
+		return false
+	}
 
 	// build our data for our message
 	v := url.Values{}
-	fmt.Printf("Lookup %s\n", directory[user])
 	v.Set("To", directory[user])
-
 	v.Set("From", "+17873392841")
 	v.Set("Body", msg+"\n- AMBot")
 
@@ -32,5 +36,5 @@ func sendSMS(user string, msg string) {
 	// make the request
 	resp, _ := client.Do(req)
 	fmt.Println(resp.Status)
-
+	return true
 }

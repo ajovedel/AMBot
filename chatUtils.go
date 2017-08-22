@@ -29,19 +29,27 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	// check if you are the users
-	/*
-		if len(m.Mentions) != 1 {
-			fmt.Printf("IGNORED22222")
-			return
-		}*/
+	messageWithoutUserMentions := strings.ToLower(m.ContentWithMentionsReplaced())
+	splitMessageWithUserMentions := strings.Fields(m.Content)
+	firstUserMentioned := strings.SplitAfterN(messageWithoutUserMentions, " ", 2)[0]
 
-	// check AM is being mentioned
-	/*
-		if m.Mentions[0].ID != s.State.User.ID {
-			fmt.Printf("IGNORED333333")
-			return
-		}*/
+	// check if you are the user being mentioned at the BEGINNING of the message
+	if !strings.Contains(firstUserMentioned, "@ambot") {
+		fmt.Printf("IGNORED333333")
+		return
+	}
+
+	// parse command
+	splitMessage := strings.Fields(messageWithoutUserMentions)
+	if len(splitMessage) == 1 {
+		s.ChannelMessageSend(m.ChannelID, "No command given. Idiot.")
+		return
+	} else if !strings.Contains(splitMessage[1], "!") {
+		s.ChannelMessageSend(m.ChannelID, "No command given. Idiot.")
+		return
+	}
+	messageCommand := splitMessage[1]
+	fmt.Printf("command is %s\n", messageCommand)
 
 	// get guild ID
 	// get channel that the message came from.
@@ -56,75 +64,102 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	fmt.Printf("Message received: %s\n", m.ContentWithMentionsReplaced())
+	fmt.Printf("Message received: %s\n", messageWithoutUserMentions)
 
 	// check message and reply/react to message
-	if strings.Contains(m.Content, "hello") {
+	if strings.Contains(messageCommand, "!hello") {
 		s.ChannelMessageSend(m.ChannelID, am)
 
-	} else if strings.Contains(m.Content, "!help") {
+	} else if strings.Contains(messageCommand, "!help") {
 		s.ChannelMessageSend(m.ChannelID, help)
 
-	} else if strings.Contains(m.Content, "!pubg") {
+	} else if strings.Contains(messageCommand, "!pubg") {
 		rand.Seed(time.Now().Unix())
 		s.ChannelMessageSend(m.ChannelID, pubgLocations[rand.Intn(len(pubgLocations))])
 
-	} else if strings.Contains(m.Content, "!request") {
+	} else if strings.Contains(messageCommand, "!request") {
 		f, err := os.OpenFile("requests.log", os.O_APPEND|os.O_WRONLY, 0600)
 		if err != nil {
 			fmt.Printf("ERR is %s", err)
 		}
 		defer f.Close()
 
-		if _, err = f.WriteString(m.ContentWithMentionsReplaced() + "\n"); err != nil {
+		if _, err = f.WriteString(messageWithoutUserMentions + "\n"); err != nil {
 			fmt.Printf("ERR is %s", err)
 		}
 		s.ChannelMessageSend(m.ChannelID, "Request has been logged and will be reviewed.")
 
-	} else if strings.Contains(m.Content, "axel") && strings.Contains(m.Content, "awesome") {
-		err = s.MessageReactionAdd(msgChannel.ID, m.ID, "💩")
-		if err != nil {
-			fmt.Printf("ERR Is: %s", err)
-		}
+		/*
 
-	} else if strings.Contains(m.Content, "luis") && strings.Contains(m.Content, "awesome") {
-		err = s.MessageReactionAdd(msgChannel.ID, m.ID, "👍")
-		if err != nil {
-			fmt.Printf("ERR Is: %s", err)
-		}
-
-	} else if strings.Contains(m.Content, "pedro") && strings.Contains(m.Content, "awesome") {
-		err = s.MessageReactionAdd(msgChannel.ID, m.ID, "😂")
-		if err != nil {
-			fmt.Printf("ERR Is: %s", err)
-		}
-
-	} else if strings.Contains(m.Content, "!randomlul") {
-		rand.Seed(time.Now().Unix())
-		s.ChannelMessageSend(m.ChannelID, lulPlaylist[rand.Intn(len(lulPlaylist))])
-
-	} else if strings.Contains(m.Content, "!text") {
-		splitContent := strings.Fields(m.Message.ContentWithMentionsReplaced())
-		user := splitContent[2]
-		smsMsg := strings.SplitAfterN(m.Message.ContentWithMentionsReplaced(), " ", 4)
-		fmt.Printf("msg is: %s\n", m.Message.ContentWithMentionsReplaced())
-		fmt.Printf("User is: %s\n", user)
-		fmt.Printf("msg is: %s\n", smsMsg[len(smsMsg)-1])
-
-		sendSMS(user, smsMsg[len(smsMsg)-1])
-
-		s.ChannelMessageSend(m.ChannelID, "Message sent.")
-
-	} else if strings.Contains(m.Content, "!surprise") {
-		fmt.Println("AIRHORN!!")
-		for _, vs := range msgGuild.VoiceStates {
-			if vs.UserID == m.Author.ID {
-				err = playSound(s, guildID, vs.ChannelID)
+			} else if strings.Contains(messageWithoutUserMentions, "axel") && strings.Contains(m.Content, "awesome") {
+				err = s.MessageReactionAdd(msgChannel.ID, m.ID, "💩")
 				if err != nil {
 					fmt.Printf("ERR Is: %s", err)
 				}
+
+			} else if strings.Contains(messageWithoutUserMentions, "luis") && strings.Contains(m.Content, "awesome") {
+				err = s.MessageReactionAdd(msgChannel.ID, m.ID, "👍")
+				if err != nil {
+					fmt.Printf("ERR is: %s", err)
+				}
+
+			} else if strings.Contains(messageWithoutUserMentions, "pedro") && strings.Contains(m.Content, "awesome") {
+				err = s.MessageReactionAdd(msgChannel.ID, m.ID, "😂")
+				if err != nil {
+					fmt.Printf("ERR is: %s", err)
+				}
+		*/
+
+	} else if strings.Contains(messageCommand, "!randomlul") {
+		rand.Seed(time.Now().Unix())
+		s.ChannelMessageSend(m.ChannelID, lulPlaylist[rand.Intn(len(lulPlaylist))])
+
+	} else if strings.Contains(messageCommand, "!text") {
+		if len(splitMessage) < 4 {
+			s.ChannelMessageSend(m.ChannelID, "You forgot your message. Moron.")
+			return
+		}
+		user := splitMessage[2]
+		smsMsg := strings.SplitAfterN(messageWithoutUserMentions, " ", 4)
+		fmt.Printf("msg is: %s\n", messageWithoutUserMentions)
+		fmt.Printf("Uuser is: %s\n", user)
+		fmt.Printf("sms message is: %s\n", smsMsg[len(smsMsg)-1])
+
+		textSuccess := sendSMS(user, smsMsg[len(smsMsg)-1])
+
+		if !textSuccess {
+			s.ChannelMessageSend(m.ChannelID, "User not found in directory. Fool.")
+			return
+		}
+
+		s.ChannelMessageSend(m.ChannelID, "Message sent.")
+
+	} else if strings.Contains(messageCommand, "!surprise") {
+		fmt.Println("AIRHORN!!")
+		airhornUser := m.Author.ID
+
+		if len(splitMessage) == 2 {
+			airhornUser = m.Author.ID
+		} else if len(splitMessage) == 3 {
+			airhornUser = splitMessageWithUserMentions[2]
+			for _, user := range m.Mentions {
+				if user.Username != "AMBot" {
+					airhornUser = user.ID
+				}
+			}
+		} else {
+			return
+		}
+		fmt.Printf("airhorn user is: %s\n", airhornUser)
+		for _, vs := range msgGuild.VoiceStates {
+			if vs.UserID == airhornUser {
+				err = playSound(s, guildID, vs.ChannelID)
+				if err != nil {
+					fmt.Printf("ERR is: %s", err)
+				}
 			}
 		}
+
 	}
 }
 

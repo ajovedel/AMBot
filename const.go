@@ -15,12 +15,12 @@ const help = "```AVAILABLE COMMANDS:\n" +
 	"	!text @[discordUserName] [messageBody]\n```"
 
 var directory = map[string]string{
-	"@Ans":     "+17873637400",
+	"@ans":     "+17873637400",
 	"@axel":    "+17876442610",
-	"@Berserk": "+17872347103",
-	"@Genex":   "+17873974022",
+	"@berserk": "+17872347103",
+	"@genex":   "+17873974022",
 	"@lobito":  "+17874140104",
-	"@Nonix":   "+19392397686",
+	"@nonix":   "+19392397686",
 }
 
 var pubgLocations = [...]string{
