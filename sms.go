@@ -9,7 +9,7 @@ import (
 
 func sendSMS(user string, msg string) bool {
 	accountSid := "AC6861dbd95a4542d1be1c0a219d7cecec"
-	authToken := "aeea5ce51e05ecc47c4e2c7e87b0a8b6"
+	authToken := ""
 	urlStr := "https://api.twilio.com/2010-04-01/Accounts/" + accountSid + "/Messages.json"
 
 	// check if user exists in our directory
