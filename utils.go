@@ -98,7 +98,7 @@ func convertToOpus(rd io.Reader) (io.Reader, error) {
 	if runtime.GOOS == "darwin" {
 		dcaBinary = "dependencies/osx-bin/dca-rs"
 	} else if runtime.GOOS == "linux" {
-		dcaBinary = "dependencies/osx-bin/dca-rs"
+		dcaBinary = "dependencies/linux-bin/dca-rs"
 	} else {
 		fmt.Printf("dca-rs not compatiable with current OS (osx and linux currently supported)\n")
 	}
