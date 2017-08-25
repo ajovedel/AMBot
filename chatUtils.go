@@ -11,7 +11,9 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-var buffer = make([][]byte, 0)
+var airHornBuffer = make([][]byte, 0)
+var youtubeBuffer = make([][]byte, 0)
+
 
 func setHandlers(discordSession *discordgo.Session) {
 	discordSession.AddHandler(messageListenAndRespond)
@@ -26,7 +28,7 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// ignore message if is for everyone
 	if m.MentionEveryone {
-		fmt.Printf("IGNORED11111")
+		fmt.Println("Ignored: Message is for everyone")
 		return
 	}
 
@@ -36,7 +38,7 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// check if you are the user being mentioned at the BEGINNING of the message
 	if !strings.Contains(firstUserMentioned, "@ambot") {
-		fmt.Printf("IGNORED333333")
+		fmt.Println("Ignored: @ambot is not mentioned at the beginnning of the message")
 		return
 	}
 
@@ -52,8 +54,7 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 	messageCommand := splitMessage[1]
 	fmt.Printf("command is %s\n", messageCommand)
 
-	// get guild ID
-	// get channel that the message came from.
+	// get channel and guild
 	msgChannel, err := s.State.Channel(m.ChannelID)
 	if err != nil {
 		return
@@ -65,19 +66,23 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	fmt.Printf("Message received: %s\n", messageWithoutUserMentions)
+	fmt.Printf("Message received: %s: %s \n", m.Author.ID, messageWithoutUserMentions)
 
 	// check message and reply/react to message
+	/***** HELLO *****/
 	if strings.Contains(messageCommand, "!hello") {
 		s.ChannelMessageSend(m.ChannelID, am)
 
+	/***** HELP MENU *****/
 	} else if strings.Contains(messageCommand, "!help") {
 		s.ChannelMessageSend(m.ChannelID, help)
 
+	/***** PUBG LOCATIONS *****/
 	} else if strings.Contains(messageCommand, "!pubg") {
 		rand.Seed(time.Now().Unix())
 		s.ChannelMessageSend(m.ChannelID, pubgLocations[rand.Intn(len(pubgLocations))])
 
+	/***** LOG REQUESTS *****/
 	} else if strings.Contains(messageCommand, "!request") {
 		f, err := os.OpenFile("requests.log", os.O_APPEND|os.O_WRONLY, 0600)
 		if err != nil {
@@ -90,56 +95,24 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 		s.ChannelMessageSend(m.ChannelID, "Request has been logged and will be reviewed.")
 
-		/*
-
-			} else if strings.Contains(messageWithoutUserMentions, "axel") && strings.Contains(m.Content, "awesome") {
-				err = s.MessageReactionAdd(msgChannel.ID, m.ID, "💩")
-				if err != nil {
-					fmt.Printf("ERR Is: %s", err)
-				}
-
-			} else if strings.Contains(messageWithoutUserMentions, "luis") && strings.Contains(m.Content, "awesome") {
-				err = s.MessageReactionAdd(msgChannel.ID, m.ID, "👍")
-				if err != nil {
-					fmt.Printf("ERR is: %s", err)
-				}
-
-			} else if strings.Contains(messageWithoutUserMentions, "pedro") && strings.Contains(m.Content, "awesome") {
-				err = s.MessageReactionAdd(msgChannel.ID, m.ID, "😂")
-				if err != nil {
-					fmt.Printf("ERR is: %s", err)
-				}
-		*/
-
 	} else if strings.Contains(messageCommand, "!randomlul") {
 		rand.Seed(time.Now().Unix())
 		s.ChannelMessageSend(m.ChannelID, lulPlaylist[rand.Intn(len(lulPlaylist))])
 
-	} else if strings.Contains(messageCommand, "!youtube") {
-		// Open a youtube stream
 
-		fmt.Println("LEL")
+	/***** YOUTUBE STREAMING *****/
+	} else if strings.Contains(messageCommand, "!youtube") {
 
 		vc, err := joinUserVoiceChannel(s, m.Author.ID)
 		if err != nil {
 			fmt.Printf("ERR is %s", err)
-
 			return
 		}
 
-		fmt.Printf("Vid is '%x'\n", splitMessage[2])
-		//fmt.Printf("Vid is '%s'\n", reflect.TypeOf(splitMessage[2]))
-
-		fmt.Printf("vid is '%x'\n", "https://www.youtube.com/watch?v=ZqNpXJwgO8o")
-
-		//vid := make(string, len(splitMessage[2]))
 		vid := splitMessageWithUserMentions[2]
-		//copy(vid, splitMessage[2])
-		fmt.Printf("Vid is '%x'\n", vid)
 
-		//yt, err := youtubePy(vid.)
+		// download youtube vid
 		yt, err := youtubePy(vid)
-
 		if err != nil {
 			fmt.Printf("ERR is: %s", err)
 			return
@@ -159,6 +132,8 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 					if err != nil {
 						if err == io.ErrUnexpectedEOF || err == io.EOF {
 							fmt.Printf("ERR is: %s", err)
+							//s.VoiceReady = false
+							vc.Disconnect()
 							break
 						}
 						fmt.Println("Audio error: ", err)
@@ -168,26 +143,26 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 		}
 
+
+	/***** TEXT MESSAGES *****/
 	} else if strings.Contains(messageCommand, "!text") {
 		if len(splitMessage) < 4 {
 			s.ChannelMessageSend(m.ChannelID, "You forgot your message. Moron.")
 			return
 		}
-		user := splitMessage[2]
+		toUser := splitMessage[2]
 		smsMsg := strings.SplitAfterN(messageWithoutUserMentions, " ", 4)
-		fmt.Printf("msg is: %s\n", messageWithoutUserMentions)
-		fmt.Printf("Uuser is: %s\n", user)
-		fmt.Printf("sms message is: %s\n", smsMsg[len(smsMsg)-1])
 
-		textSuccess := sendSMS(user, smsMsg[len(smsMsg)-1])
+		textSuccess := sendSMS(toUser, m.Author.ID, smsMsg[len(smsMsg)-1])
 
 		if !textSuccess {
 			s.ChannelMessageSend(m.ChannelID, "User not found in directory. Fool.")
 			return
 		}
-
 		s.ChannelMessageSend(m.ChannelID, "Message sent.")
 
+
+		/*** AIRHORN USER ***/
 	} else if strings.Contains(messageCommand, "!surprise") {
 		fmt.Println("AIRHORN!!")
 		airhornUser := m.Author.ID
@@ -198,7 +173,6 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 			airhornUser = splitMessageWithUserMentions[2]
 			for _, user := range m.Mentions {
 				if user.Username != "AMBot" {
-					fmt.Printf("airhorn userrrr: %s\n", user.Username)
 					airhornUser = user.ID
 				}
 			}
@@ -215,16 +189,13 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 				}
 			}
 		}
-
 	}
 }
 
 // playSound plays the current buffer to the provided channel.
 func playSound(s *discordgo.Session, guildID, channelID string) (err error) {
 
-	fmt.Printf("Buffer is: %v", buffer)
-
-	// Join the provided voice channel.
+	// join the voice channel
 	vc, err := s.ChannelVoiceJoin(guildID, channelID, false, true)
 	if err != nil {
 		return err
@@ -237,8 +208,8 @@ func playSound(s *discordgo.Session, guildID, channelID string) (err error) {
 	vc.Speaking(true)
 
 	// Send the buffer data.
-	for _, buff := range buffer {
-		vc.OpusSend <- buff
+	for _, buff := range airHornBuffer {
+		vc.OpusSend <- airHornBuffer
 	}
 
 	// Stop speaking
@@ -247,7 +218,6 @@ func playSound(s *discordgo.Session, guildID, channelID string) (err error) {
 	// Sleep for a specificed amount of time before ending.
 	time.Sleep(250 * time.Millisecond)
 
-	// Disconnect from the provided voice channel.
 	vc.Disconnect()
 
 	return nil

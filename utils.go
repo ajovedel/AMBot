@@ -53,9 +53,10 @@ func loadSound() error {
 		}
 
 		// Append encoded pcm data to the buffer.
-		buffer = append(buffer, InBuf)
+		airHornBuffer = append(airHornBuffer, InBuf)
 	}
 }
+
 
 func loadYoutube(url string) error {
 	// Open a youtube stream
@@ -70,24 +71,15 @@ func loadYoutube(url string) error {
 		return err
 	}
 
-	//fmt.Printf("stream is: %d\n", len(stream))
+	youtubeTempBuffer := new(bytes.Buffer)
+	youtubeTempBuffer.ReadFrom(stream)
 
-	//var youtubeBuffer = make([]byte, 0)
-
-	youtubeBuffer := new(bytes.Buffer)
-	youtubeBuffer.ReadFrom(stream)
-
-	/*_, err = stream.Read(youtubeBuffer)
-	if err != nil {
-		return err
-	}*/
-	fmt.Printf("I made it to buffer append, %d\n", len(youtubeBuffer.Bytes()))
-
-	buffer = append(buffer, youtubeBuffer.Bytes())
+	// append youtube vid to buffer
+	youtubeBuffer = append(youtubeBuffer, youtubeTempBuffer.Bytes())
 
 	return nil
-
 }
+
 
 // convertToOpus converts the given io.Reader stream to an Opus stream
 // Using ffmpeg and dca-rs
