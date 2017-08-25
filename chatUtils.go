@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"math/rand"
 	"os"
 	"strings"
@@ -114,6 +115,59 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		rand.Seed(time.Now().Unix())
 		s.ChannelMessageSend(m.ChannelID, lulPlaylist[rand.Intn(len(lulPlaylist))])
 
+	} else if strings.Contains(messageCommand, "!youtube") {
+		// Open a youtube stream
+
+		fmt.Println("LEL")
+
+		vc, err := joinUserVoiceChannel(s, m.Author.ID)
+		if err != nil {
+			fmt.Printf("ERR is %s", err)
+
+			return
+		}
+
+		fmt.Printf("Vid is '%x'\n", splitMessage[2])
+		//fmt.Printf("Vid is '%s'\n", reflect.TypeOf(splitMessage[2]))
+
+		fmt.Printf("vid is '%x'\n", "https://www.youtube.com/watch?v=ZqNpXJwgO8o")
+
+		//vid := make(string, len(splitMessage[2]))
+		vid := splitMessageWithUserMentions[2]
+		//copy(vid, splitMessage[2])
+		fmt.Printf("Vid is '%x'\n", vid)
+
+		//yt, err := youtubePy(vid.)
+		yt, err := youtubePy(vid)
+
+		if err != nil {
+			fmt.Printf("ERR is: %s", err)
+			return
+		}
+
+		// Create opus stream
+		stream, err := convertToOpus(yt)
+		if err != nil {
+			fmt.Printf("ERR is %s", err)
+			return
+		}
+
+		for _, vs := range msgGuild.VoiceStates {
+			if vs.UserID == m.Author.ID {
+				for {
+					opus, err := readOpus(stream)
+					if err != nil {
+						if err == io.ErrUnexpectedEOF || err == io.EOF {
+							fmt.Printf("ERR is: %s", err)
+							break
+						}
+						fmt.Println("Audio error: ", err)
+					}
+					vc.OpusSend <- opus
+				}
+			}
+		}
+
 	} else if strings.Contains(messageCommand, "!text") {
 		if len(splitMessage) < 4 {
 			s.ChannelMessageSend(m.ChannelID, "You forgot your message. Moron.")
@@ -167,6 +221,8 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 // playSound plays the current buffer to the provided channel.
 func playSound(s *discordgo.Session, guildID, channelID string) (err error) {
+
+	fmt.Printf("Buffer is: %v", buffer)
 
 	// Join the provided voice channel.
 	vc, err := s.ChannelVoiceJoin(guildID, channelID, false, true)
