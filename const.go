@@ -12,6 +12,7 @@ const help = "```AVAILABLE COMMANDS:\n" +
 	"	!surprise @[optionalUserName]\n" +
 	"	!pubg\n" +
 	"	!request [yourRequest]\n" +
+	"	!youtube [youtubeURL]\n" +
 	"	!text @[discordUserName] [messageBody]\n```"
 
 var directory = map[string]string{

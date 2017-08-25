@@ -21,5 +21,6 @@ AVAILABLE COMMANDS:
   !surprise @[optionalUserName]
   !pubg
   !request [yourRequest]
+  !youtube [youtubeURL]
   !text @[discordUserName] [messageBody]
 ```
