@@ -9,6 +9,7 @@ import (
 	"io"
 	"os"
 	"os/exec"
+	"runtime"
 
 	"github.com/bwmarrin/discordgo"
 )
@@ -57,7 +58,6 @@ func loadSound() error {
 	}
 }
 
-
 func loadYoutube(url string) error {
 	// Open a youtube stream
 	yt, err := youtubePy(url)
@@ -80,12 +80,12 @@ func loadYoutube(url string) error {
 	return nil
 }
 
-
 // convertToOpus converts the given io.Reader stream to an Opus stream
 // Using ffmpeg and dca-rs
 func convertToOpus(rd io.Reader) (io.Reader, error) {
 
 	// Convert to a format that can be passed to dca-rs
+	fmt.Printf("runtime is: %s\n", runtime.GOOS)
 	ffmpeg := exec.Command("ffmpeg", "-i", "pipe:0", "-f", "s16le", "-ar", "48000", "-ac", "2", "pipe:1")
 	ffmpeg.Stdin = rd
 	ffmpegout, err := ffmpeg.StdoutPipe()
@@ -93,8 +93,18 @@ func convertToOpus(rd io.Reader) (io.Reader, error) {
 		return nil, err
 	}
 
+	// get the proper dca-rs binary
+	dcaBinary := ""
+	if runtime.GOOS == "darwin" {
+		dcaBinary = "dependencies/osx-bin/dca-rs"
+	} else if runtime.GOOS == "linux" {
+		dcaBinary = "dependencies/osx-bin/dca-rs"
+	} else {
+		fmt.Printf("dca-rs not compatiable with current OS (osx and linux currently supported)\n")
+	}
+
 	// Convert to opus
-	dca := exec.Command("depedencies/bin/dca-rs", "--raw", "-i", "pipe:0")
+	dca := exec.Command(dcaBinary, "--raw", "-i", "pipe:0")
 	dca.Stdin = ffmpegout
 	dcaout, err := dca.StdoutPipe()
 	dcabuf := bufio.NewReaderSize(dcaout, 1024)

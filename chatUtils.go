@@ -209,7 +209,7 @@ func playSound(s *discordgo.Session, guildID, channelID string) (err error) {
 
 	// Send the buffer data.
 	for _, buff := range airHornBuffer {
-		vc.OpusSend <- airHornBuffer
+		vc.OpusSend <- buff
 	}
 
 	// Stop speaking
