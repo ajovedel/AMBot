@@ -14,7 +14,6 @@ import (
 var airHornBuffer = make([][]byte, 0)
 var youtubeBuffer = make([][]byte, 0)
 
-
 func setHandlers(discordSession *discordgo.Session) {
 	discordSession.AddHandler(messageListenAndRespond)
 }
@@ -73,16 +72,16 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if strings.Contains(messageCommand, "!hello") {
 		s.ChannelMessageSend(m.ChannelID, am)
 
-	/***** HELP MENU *****/
+		/***** HELP MENU *****/
 	} else if strings.Contains(messageCommand, "!help") {
 		s.ChannelMessageSend(m.ChannelID, help)
 
-	/***** PUBG LOCATIONS *****/
+		/***** PUBG LOCATIONS *****/
 	} else if strings.Contains(messageCommand, "!pubg") {
 		rand.Seed(time.Now().Unix())
 		s.ChannelMessageSend(m.ChannelID, pubgLocations[rand.Intn(len(pubgLocations))])
 
-	/***** LOG REQUESTS *****/
+		/***** LOG REQUESTS *****/
 	} else if strings.Contains(messageCommand, "!request") {
 		f, err := os.OpenFile("requests.log", os.O_APPEND|os.O_WRONLY, 0600)
 		if err != nil {
@@ -99,8 +98,7 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		rand.Seed(time.Now().Unix())
 		s.ChannelMessageSend(m.ChannelID, lulPlaylist[rand.Intn(len(lulPlaylist))])
 
-
-	/***** YOUTUBE STREAMING *****/
+		/***** YOUTUBE STREAMING *****/
 	} else if strings.Contains(messageCommand, "!youtube") {
 
 		vc, err := joinUserVoiceChannel(s, m.Author.ID)
@@ -143,8 +141,7 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 		}
 
-
-	/***** TEXT MESSAGES *****/
+		/***** TEXT MESSAGES *****/
 	} else if strings.Contains(messageCommand, "!text") {
 		if len(splitMessage) < 4 {
 			s.ChannelMessageSend(m.ChannelID, "You forgot your message. Moron.")
@@ -153,14 +150,13 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		toUser := splitMessage[2]
 		smsMsg := strings.SplitAfterN(messageWithoutUserMentions, " ", 4)
 
-		textSuccess := sendSMS(toUser, m.Author.ID, smsMsg[len(smsMsg)-1])
+		textSuccess := sendSMS(toUser, m.Author.Username, smsMsg[len(smsMsg)-1])
 
 		if !textSuccess {
 			s.ChannelMessageSend(m.ChannelID, "User not found in directory. Fool.")
 			return
 		}
 		s.ChannelMessageSend(m.ChannelID, "Message sent.")
-
 
 		/*** AIRHORN USER ***/
 	} else if strings.Contains(messageCommand, "!surprise") {
