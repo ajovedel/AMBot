@@ -67,13 +67,12 @@ func main() {
 	}
 
 	// load sounds
-	/*
-		err = loadSound()
-		if err != nil {
-			fmt.Println("Error loading sound: ", err)
-			fmt.Println("Please copy $GOPATH/src/github.com/bwmarrin/examples/airhorn/airhorn.dca to this directory.")
-			return
-		}*/
+	err = loadSound()
+	if err != nil {
+		fmt.Println("Error loading sound: ", err)
+		fmt.Println("Please copy $GOPATH/src/github.com/bwmarrin/examples/airhorn/airhorn.dca to this directory.")
+		return
+	}
 
 	// set our fancy handlers
 	setHandlers(discordSession)
