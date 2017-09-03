@@ -180,7 +180,7 @@ func updateBetEventGamblerQuery(betEventID int, gamblerBet map[string]bet) (int6
 			fmt.Printf("Not enough coins for the bet. Looser\n")
 			return 0, nil
 		} else {
-			updateAmCoins(amCoins - gamblerBet[k].Money)
+			updateAmCoins(k, amCoins-gamblerBet[k].Money)
 		}
 	}
 
@@ -251,8 +251,8 @@ func getAmCoins(name string) (int, error) {
 	return amCoins, nil
 }
 
-func updateAmCoins(newCoinAmount int) (int64, error) {
-	query := fmt.Sprint("UPDATE coinBank SET amCoins = ?")
+func updateAmCoins(name string, newCoinAmount int) (int64, error) {
+	query := fmt.Sprint("UPDATE coinBank SET amCoins = ? WHERE name=?")
 
 	tx, err := ambotDB.Begin()
 	if err != nil {
@@ -266,7 +266,7 @@ func updateAmCoins(newCoinAmount int) (int64, error) {
 	}
 	defer stmt.Close()
 
-	res, err := stmt.Exec(newCoinAmount)
+	res, err := stmt.Exec(name, newCoinAmount)
 	if err != nil {
 		fmt.Println(err)
 		return 0, err
