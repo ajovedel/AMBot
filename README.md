@@ -23,4 +23,9 @@ AVAILABLE COMMANDS:
   !request [yourRequest]
   !youtube [youtubeURL]
   !text @[discordUserName] [messageBody]
+  bets:
+    !show-bets
+	  !place-bet [betID] [CoinAmount] [outcome]
+	  !create-bet [betDescription] [Outcome1 | Outcome 2 | ... | Outcome N]
+	!wallet
 ```

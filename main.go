@@ -11,7 +11,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-const Version = "v0.0.1-alpha"
+const Version = "v0.0.3-alpha"
 
 var discordSession, _ = discordgo.New()
 
@@ -85,6 +85,7 @@ func main() {
 
 	// Clean up
 	discordSession.Close()
+	ambotDB.Close()
 
 	// Exit Normally.
 }

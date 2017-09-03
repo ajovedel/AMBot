@@ -5,6 +5,7 @@ import (
 	"io"
 	"math/rand"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -20,18 +21,21 @@ func setHandlers(discordSession *discordgo.Session) {
 
 func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 
+	messageWithoutUserMentions := strings.ToLower(m.ContentWithMentionsReplaced())
+
+	fmt.Printf("Message is '%s' from '%s'\n", messageWithoutUserMentions, m.Author.Username)
+
 	// ignore message posted by AM
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
 
 	// ignore message if is for everyone
-	if m.MentionEveryone {
+	if m.MentionEveryone && !strings.Contains(messageWithoutUserMentions, "!text") {
 		fmt.Println("Ignored: Message is for everyone")
 		return
 	}
 
-	messageWithoutUserMentions := strings.ToLower(m.ContentWithMentionsReplaced())
 	splitMessageWithUserMentions := strings.Fields(m.Content)
 	firstUserMentioned := strings.SplitAfterN(messageWithoutUserMentions, " ", 2)[0]
 
@@ -150,13 +154,22 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		toUser := splitMessage[2]
 		smsMsg := strings.SplitAfterN(messageWithoutUserMentions, " ", 4)
 
-		textSuccess := sendSMS(toUser, m.Author.Username, smsMsg[len(smsMsg)-1])
+		textSuccess := false
+
+		if toUser == "@everyone" {
+			for user := range directory {
+				textSuccess = sendSMS(user, m.Author.Username, smsMsg[len(smsMsg)-1])
+			}
+		} else {
+			textSuccess = sendSMS(toUser, m.Author.Username, smsMsg[len(smsMsg)-1])
+		}
 
 		if !textSuccess {
 			s.ChannelMessageSend(m.ChannelID, "User not found in directory. Fool.")
 			return
+		} else {
+			s.ChannelMessageSend(m.ChannelID, "Message sent.")
 		}
-		s.ChannelMessageSend(m.ChannelID, "Message sent.")
 
 		/*** AIRHORN USER ***/
 	} else if strings.Contains(messageCommand, "!surprise") {
@@ -185,6 +198,102 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 				}
 			}
 		}
+
+		/***** CREATE BET EVENTS *****/
+	} else if strings.Contains(messageCommand, "!create-bet") {
+		eventNameStart := false
+		eventName := ""
+
+		// parse event name
+		for _, word := range splitMessage {
+			if strings.Contains(word, messageCommand) {
+				eventNameStart = true
+			} else if word == "|" {
+				eventNameStart = false
+			} else if eventNameStart {
+				eventName = eventName + word + " "
+			}
+		}
+
+		// parse event name, outcomes, creator and store in DB
+		outcomes := strings.Split(messageWithoutUserMentions, "|")
+		myBetEvent := new(betEvent)
+		myBetEvent.outcomes = make([]string, len(outcomes)-1)
+		for i, outcome := range outcomes {
+			fmt.Printf("int is: %d\n", i)
+			if i == 0 {
+
+			} else {
+				myBetEvent.outcomes[i-1] = strings.TrimSpace(outcome)
+			}
+		}
+		myBetEvent.name = strings.TrimSpace(eventName)
+		myBetEvent.creator = m.Author.Username
+		myBetEvent.active = true
+
+		fmt.Printf("event is: %+v\n", myBetEvent)
+		insertBetEventQuery(myBetEvent)
+		getBetEventQuery(1)
+
+		/****** PLACE BETS *****/
+	} else if strings.Contains(messageCommand, "!place-bet") {
+		if len(splitMessage) != 5 {
+			s.ChannelMessageSend(m.ChannelID, "Your bet is not properly formatted. Imbecile")
+			return
+		}
+
+		// parse betEventID and betAmount
+		betEventID, err := strconv.Atoi(splitMessage[2])
+		if err != nil {
+			fmt.Printf("Error parsing betting ID. Make sure it uses digits only: %s\n", err)
+			return
+		}
+		betAmount, err := strconv.Atoi(splitMessage[3])
+		if err != nil {
+			fmt.Printf("Error parsing betting amount. Make sure it uses digits only: %s\n", err)
+			return
+		}
+		betOutcome := splitMessage[4]
+		if err != nil {
+			fmt.Printf("Error parsing betting outcome. Make sure it is one of accepted outcomes: %s\n", err)
+			return
+		}
+
+		gamblerBet := map[string]bet{strings.ToLower(m.Author.Username): {Money: betAmount, Outcome: betOutcome}}
+
+		updatedGamble, err := updateBetEventGamblerQuery(betEventID, gamblerBet)
+
+		if updatedGamble == 1 {
+			s.ChannelMessageSend(m.ChannelID, "Your bet has been placed. Good luck!")
+		} else if err != nil {
+			s.ChannelMessageSend(m.ChannelID, err.Error())
+			fmt.Printf("error is: %s\n", err)
+		} else {
+			s.ChannelMessageSend(m.ChannelID, "Your transaction could not be completed. Please try again later")
+		}
+
+		/***** SHOW ALL BET EVENTS */
+	} else if strings.Contains(messageCommand, "!show-bets") {
+		var allBetEvents []betEvent
+		allBetEventsStr := ""
+		allBetEvents = getAllBetEventsQuery()
+
+		allBetEventsStr = allBetEventsStr + "```\n"
+		allBetEventsStr = allBetEventsStr + "Event Name | Outcomes | Bet Creator | Gamblers | Active | Bet Event ID\n"
+		for _, myBetEvent := range allBetEvents {
+			allBetEventsStr = allBetEventsStr + fmt.Sprintf("%s\n", myBetEvent.discordPrettyPrint())
+		}
+		allBetEventsStr = allBetEventsStr + "```"
+
+		s.ChannelMessageSend(m.ChannelID, allBetEventsStr)
+
+		/***** GET YOUR WALLET *****/
+	} else if strings.Contains(messageCommand, "!wallet") {
+		userAmCoins, err := getAmCoins(strings.ToLower(m.Author.Username))
+		if err != nil {
+			fmt.Printf("error getting coins: %s\n", err)
+		}
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("`%s: %d`", m.Author.Username, userAmCoins))
 	}
 }
 

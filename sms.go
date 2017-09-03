@@ -21,8 +21,9 @@ func sendSMS(toUser string, fromUser string, msg string) bool {
 	// build our data for our message
 	v := url.Values{}
 	v.Set("To", directory[toUser])
-	v.Set("From", "+17873392841")
+	v.Set("From", "+14159961749")
 	v.Set("Body", msg+"\n- AMBot ("+fromUser+")")
+	//v.Set("MediaUrl", "https://www.shitpostbot.com/img/sourceimages/hedgey-is-a-ok-57f2d71092a97.jpeg")
 
 	rb := *strings.NewReader(v.Encode())
 
