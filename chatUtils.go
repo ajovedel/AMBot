@@ -73,20 +73,22 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	// check message and reply/react to message
 	/***** HELLO *****/
-	if strings.Contains(messageCommand, "!hello") {
+	switch messageCommand {
+
+	case "!hello":
 		s.ChannelMessageSend(m.ChannelID, am)
 
-		/***** HELP MENU *****/
-	} else if strings.Contains(messageCommand, "!help") {
+	/***** HELP MENU *****/
+	case "!help":
 		s.ChannelMessageSend(m.ChannelID, help)
 
-		/***** PUBG LOCATIONS *****/
-	} else if strings.Contains(messageCommand, "!pubg") {
+	/***** PUBG LOCATIONS *****/
+	case "!pubg":
 		rand.Seed(time.Now().Unix())
 		s.ChannelMessageSend(m.ChannelID, pubgLocations[rand.Intn(len(pubgLocations))])
 
-		/***** LOG REQUESTS *****/
-	} else if strings.Contains(messageCommand, "!request") {
+	/***** LOG REQUESTS *****/
+	case "!request":
 		f, err := os.OpenFile("requests.log", os.O_APPEND|os.O_WRONLY, 0600)
 		if err != nil {
 			fmt.Printf("ERR is %s", err)
@@ -98,13 +100,12 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 		s.ChannelMessageSend(m.ChannelID, "Request has been logged and will be reviewed.")
 
-	} else if strings.Contains(messageCommand, "!randomlul") {
+	case "!randomlul":
 		rand.Seed(time.Now().Unix())
 		s.ChannelMessageSend(m.ChannelID, lulPlaylist[rand.Intn(len(lulPlaylist))])
 
-		/***** YOUTUBE STREAMING *****/
-	} else if strings.Contains(messageCommand, "!youtube") {
-
+	/***** YOUTUBE STREAMING *****/
+	case "youtube":
 		vc, err := joinUserVoiceChannel(s, m.Author.ID)
 		if err != nil {
 			fmt.Printf("ERR is %s", err)
@@ -145,8 +146,8 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 		}
 
-		/***** TEXT MESSAGES *****/
-	} else if strings.Contains(messageCommand, "!text") {
+	/***** TEXT MESSAGES *****/
+	case "!text":
 		if len(splitMessage) < 4 {
 			s.ChannelMessageSend(m.ChannelID, "You forgot your message. Moron.")
 			return
@@ -171,8 +172,8 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, "Message sent.")
 		}
 
-		/*** AIRHORN USER ***/
-	} else if strings.Contains(messageCommand, "!surprise") {
+	/*** AIRHORN USER ***/
+	case "!surprise":
 		fmt.Println("AIRHORN!!")
 		airhornUser := m.Author.ID
 
@@ -199,8 +200,8 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 			}
 		}
 
-		/***** CREATE BET EVENTS *****/
-	} else if strings.Contains(messageCommand, "!create-bet") {
+	/***** CREATE BET EVENTS *****/
+	case "!create-bet":
 		eventNameStart := false
 		eventName := ""
 
@@ -235,8 +236,8 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		insertBetEventQuery(myBetEvent)
 		getBetEventQuery(1)
 
-		/****** PLACE BETS *****/
-	} else if strings.Contains(messageCommand, "!place-bet") {
+	/****** PLACE BETS *****/
+	case "!place-bet":
 		if len(splitMessage) < 5 {
 			s.ChannelMessageSend(m.ChannelID, "Your bet is not properly formatted. Imbecile")
 			return
@@ -275,8 +276,8 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 			s.ChannelMessageSend(m.ChannelID, "Your transaction could not be completed. Please try again later")
 		}
 
-		/***** SHOW ALL BET EVENTS */
-	} else if strings.Contains(messageCommand, "!show-bets") {
+	/***** SHOW ALL BET EVENTS */
+	case "!show-bets":
 		var allBetEvents []betEvent
 		allBetEventsStr := ""
 		allBetEvents = getAllBetEventsQuery()
@@ -290,8 +291,8 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		s.ChannelMessageSend(m.ChannelID, allBetEventsStr)
 
-		/***** GET YOUR WALLET *****/
-	} else if strings.Contains(messageCommand, "!wallet") {
+	/***** GET YOUR WALLET *****/
+	case "!wallet":
 		userAmCoins, err := getAmCoins(strings.ToLower(m.Author.Username))
 		if err != nil {
 			fmt.Printf("error getting coins: %s\n", err)
@@ -312,7 +313,6 @@ func playSound(s *discordgo.Session, guildID, channelID string) (err error) {
 	// Sleep for a specified amount of time before playing the sound
 	time.Sleep(250 * time.Millisecond)
 
-	// Start speaking.
 	vc.Speaking(true)
 
 	// Send the buffer data.
@@ -320,7 +320,6 @@ func playSound(s *discordgo.Session, guildID, channelID string) (err error) {
 		vc.OpusSend <- buff
 	}
 
-	// Stop speaking
 	vc.Speaking(false)
 
 	// Sleep for a specificed amount of time before ending.
