@@ -237,7 +237,7 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		/****** PLACE BETS *****/
 	} else if strings.Contains(messageCommand, "!place-bet") {
-		if len(splitMessage) != 5 {
+		if len(splitMessage) < 5 {
 			s.ChannelMessageSend(m.ChannelID, "Your bet is not properly formatted. Imbecile")
 			return
 		}
