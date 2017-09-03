@@ -105,7 +105,7 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		s.ChannelMessageSend(m.ChannelID, lulPlaylist[rand.Intn(len(lulPlaylist))])
 
 	/***** YOUTUBE STREAMING *****/
-	case "youtube":
+	case "!youtube":
 		vc, err := joinUserVoiceChannel(s, m.Author.ID)
 		if err != nil {
 			fmt.Printf("ERR is %s", err)
@@ -298,6 +298,10 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 			fmt.Printf("error getting coins: %s\n", err)
 		}
 		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("`%s: %d`", m.Author.Username, userAmCoins))
+
+	default:
+		fmt.Printf("Command not found\n")
+		s.ChannelMessageSend(m.ChannelID, "wat")
 	}
 }
 
