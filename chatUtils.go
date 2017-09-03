@@ -253,7 +253,10 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 			fmt.Printf("Error parsing betting amount. Make sure it uses digits only: %s\n", err)
 			return
 		}
-		betOutcome := splitMessage[4]
+		betOutcome := ""
+		for i := 4; i < len(splitMessage); i++ {
+			betOutcome = betOutcome + splitMessage[i]
+		}
 		if err != nil {
 			fmt.Printf("Error parsing betting outcome. Make sure it is one of accepted outcomes: %s\n", err)
 			return
