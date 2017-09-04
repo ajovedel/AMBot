@@ -20,6 +20,7 @@ AVAILABLE COMMANDS:
   !randomlul
   !surprise @[optionalUserName]
   !pubg
+  !roll [maxRollNumber]
   !request [yourRequest]
   !youtube [youtubeURL]
   !stfu

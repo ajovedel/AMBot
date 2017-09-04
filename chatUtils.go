@@ -318,6 +318,21 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 		s.ChannelMessageSendTTS(m.ChannelID, sayMessage)
 
+	/***** RANDOM ROLL *****/
+	case "!roll":
+		if len(splitMessage) != 3 {
+			s.ChannelMessageSend(m.ChannelID, "Your roll is not properly formatted. Imbecile")
+			return
+		}
+		rollMax, err := strconv.Atoi(splitMessage[2])
+		if err != nil {
+			s.ChannelMessageSend(m.ChannelID, "Roll needs to be a number. Imbecile")
+			return
+		}
+		rand.Seed(time.Now().Unix())
+		randNum := rand.Intn(rollMax)
+		s.ChannelMessageSend(m.ChannelID, strconv.Itoa(randNum))
+
 	default:
 		fmt.Printf("Command not found\n")
 		s.ChannelMessageSend(m.ChannelID, "wat")
