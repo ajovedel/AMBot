@@ -61,12 +61,14 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 	// get channel and guild
 	msgChannel, err := s.State.Channel(m.ChannelID)
 	if err != nil {
+		fmt.Printf("Err is: %s\n", err)
 		return
 	}
 	guildID := msgChannel.GuildID
 
 	msgGuild, err := s.State.Guild(guildID)
 	if err != nil {
+		fmt.Printf("Err is: %s\n", err)
 		return
 	}
 
