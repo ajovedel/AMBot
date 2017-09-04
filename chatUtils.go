@@ -14,6 +14,7 @@ import (
 
 var airHornBuffer = make([][]byte, 0)
 var youtubeBuffer = make([][]byte, 0)
+var stfu = make(chan bool, 1)
 
 func setHandlers(discordSession *discordgo.Session) {
 	discordSession.AddHandler(messageListenAndRespond)
@@ -135,16 +136,26 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 					if err != nil {
 						if err == io.ErrUnexpectedEOF || err == io.EOF {
 							fmt.Printf("ERR is: %s", err)
-							//s.VoiceReady = false
+							//s.VoficeReady = false
 							vc.Disconnect()
 							break
 						}
 						fmt.Println("Audio error: ", err)
 					}
-					vc.OpusSend <- opus
+					select {
+					case <-stfu:
+						vc.Disconnect()
+						return
+					default:
+						vc.OpusSend <- opus
+					}
 				}
 			}
 		}
+
+	/***** STOP PLAYING YOUTUBE *****/
+	case "!stfu":
+		stfu <- true
 
 	/***** TEXT MESSAGES *****/
 	case "!text":

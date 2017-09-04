@@ -125,13 +125,13 @@ func convertToOpus(rd io.Reader) (io.Reader, error) {
 	}
 
 	// Returns a stream of opus data
+	fmt.Printf("Im in covertToOpus\n")
 	return dcabuf, nil
 }
 
 // youtubePy downloads a URL using the python ytdl
 func youtubePy(url string) (io.Reader, error) {
 	fmt.Printf("Url is: %s\n", url)
-	fmt.Printf("Url is: %x\n", url)
 
 	ytdl := exec.Command("youtube-dl", "-f", "bestaudio", "-o", "-", url)
 	ytdlout, err := ytdl.StdoutPipe()

@@ -13,12 +13,13 @@ const help = "```AVAILABLE COMMANDS:\n" +
 	"	!pubg\n" +
 	"	!request [yourRequest]\n" +
 	"	!youtube [youtubeURL]\n" +
+	"	!stfu\n" +
 	"	!text @[discordUserName] [messageBody]\n" +
 	"	bets:\n" +
 	"		!show-bets\n" +
 	"		!place-bet [betID] [CoinAmount] [outcome]\n" +
 	"		!create-bet [betDescription] [Outcome1 | Outcome 2 | ... | Outcome N]\n" +
-	"	!wallet\n```"
+	"		!wallet\n```"
 
 var directory = map[string]string{
 	"@ans":      "+17873637400",
