@@ -156,6 +156,7 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 	/***** STOP PLAYING YOUTUBE *****/
 	case "!stfu":
 		stfu <- true
+		s.ChannelMessageSend(m.ChannelID, "Ok. 😢")
 
 	/***** TEXT MESSAGES *****/
 	case "!text":
