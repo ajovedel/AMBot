@@ -319,7 +319,8 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		for i := 2; i < len(splitMessage); i++ {
 			sayMessage = sayMessage + splitMessage[i] + " "
 		}
-		s.ChannelMessageSendTTS(m.ChannelID, sayMessage)
+		messageID, _ := s.ChannelMessageSendTTS(m.ChannelID, sayMessage)
+		s.ChannelMessageDelete(m.ChannelID, messageID.ID)
 
 	/***** RANDOM ROLL *****/
 	case "!roll":
