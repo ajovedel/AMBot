@@ -17,7 +17,7 @@ import (
 // loadSound attempts to load an encoded sound file from disk.
 func loadSound() error {
 
-	file, err := os.Open("airhorn.dca")
+	file, err := os.Open("files/airhorn.dca")
 	if err != nil {
 		fmt.Println("Error opening dca file :", err)
 		return err
