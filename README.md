@@ -20,10 +20,10 @@ AVAILABLE COMMANDS:
   !randomlul
   !surprise @[optionalUserName]
   !pubg
+  !stfu
   !roll [maxRollNumber]
   !request [yourRequest]
   !youtube [youtubeURL]
-  !stfu
   !say [text2voiceMessage]
   !text @[discordUserName] [messageBody]
   bets:
