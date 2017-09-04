@@ -159,6 +159,13 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 	case "!stfu":
 		stfu <- true
 		s.ChannelMessageSend(m.ChannelID, "Ok. 😢")
+		time.Sleep(5 * time.Second)
+		select {
+		case <-stfu:
+			fmt.Println("stfu channel cleared")
+		default:
+			return
+		}
 
 	/***** TEXT MESSAGES *****/
 	case "!text":
