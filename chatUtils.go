@@ -310,6 +310,14 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("`%s: %d`", m.Author.Username, userAmCoins))
 
+	/***** USE TTS TO SPEAK TEXT MESSAGES *****/
+	case "!say":
+		sayMessage := ""
+		for i := 2; i < len(splitMessage); i++ {
+			sayMessage = sayMessage + splitMessage[i] + " "
+		}
+		s.ChannelMessageSendTTS(m.ChannelID, sayMessage)
+
 	default:
 		fmt.Printf("Command not found\n")
 		s.ChannelMessageSend(m.ChannelID, "wat")

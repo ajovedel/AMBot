@@ -23,6 +23,7 @@ AVAILABLE COMMANDS:
   !request [yourRequest]
   !youtube [youtubeURL]
   !stfu
+  !say [yourTextMessage]
   !text @[discordUserName] [messageBody]
   bets:
     !show-bets
