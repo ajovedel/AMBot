@@ -14,7 +14,7 @@ const help = "```AVAILABLE COMMANDS:\n" +
 	"	!request [yourRequest]\n" +
 	"	!youtube [youtubeURL]\n" +
 	"	!stfu\n" +
-	"	!say\n" +
+	"	!say [text2voiceMessage]\n" +
 	"	!text @[discordUserName] [messageBody]\n" +
 	"	bets:\n" +
 	"		!show-bets\n" +
