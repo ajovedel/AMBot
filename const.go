@@ -12,6 +12,7 @@ const help = "```AVAILABLE COMMANDS:\n" +
 	"	!surprise @[optionalUserName]\n" +
 	"	!pubg\n" +
 	"	!stfu\n" +
+	"	!8ball\n" +
 	"	!roll [maxRollNumber]\n" +
 	"	!request [yourRequest]\n" +
 	"	!youtube [youtubeURL]\n" +

@@ -21,6 +21,7 @@ AVAILABLE COMMANDS:
   !surprise @[optionalUserName]
   !pubg
   !stfu
+  !8ball
   !roll [maxRollNumber]
   !request [yourRequest]
   !youtube [youtubeURL]
