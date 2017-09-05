@@ -326,6 +326,7 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		for i := 2; i < len(splitMessage); i++ {
 			sayMessage = sayMessage + splitMessage[i] + " "
 		}
+
 		messageID, _ := s.ChannelMessageSendTTS(m.ChannelID, sayMessage)
 		s.ChannelMessageDelete(m.ChannelID, messageID.ID)
 
@@ -343,6 +344,11 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		rand.Seed(time.Now().Unix())
 		randNum := rand.Intn(rollMax)
 		s.ChannelMessageSend(m.ChannelID, strconv.Itoa(randNum))
+
+	/***** 8-BALL *****/
+	case "!8ball":
+		rand.Seed(time.Now().Unix())
+		s.ChannelMessageSend(m.ChannelID, eightBallAnswers[rand.Intn(len(eightBallAnswers))])
 
 	default:
 		fmt.Printf("Command not found\n")
