@@ -120,7 +120,7 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 			return
 		}
 		youtubeURL := splitMessage[2]
-		if strings.Contains(youtubeURL, "https") || strings.Contains(youtubeURL, "youtube") {
+		if !(strings.Contains(youtubeURL, "https") || strings.Contains(youtubeURL, "youtube")) {
 			s.ChannelMessageSend(m.ChannelID, "Not a youtube vid. fuck off")
 			return
 		}
