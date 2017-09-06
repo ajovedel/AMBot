@@ -23,6 +23,7 @@ func setHandlers(discordSession *discordgo.Session) {
 func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	messageWithoutUserMentions := strings.ToLower(m.ContentWithMentionsReplaced())
+	messageWithoutUserMentionsCaseSensitive := strings.Fields(strings.ToLower(m.ContentWithMentionsReplaced()))
 
 	fmt.Printf("Message is '%s' from '%s'\n", messageWithoutUserMentions, m.Author.Username)
 
@@ -115,11 +116,11 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	/***** INSERT YOUTUBE VID INTO DB*****/
 	case "!insertrandomlul":
-		if len(splitMessage) != 3 {
+		if len(messageWithoutUserMentionsCaseSensitive) != 3 {
 			s.ChannelMessageSend(m.ChannelID, "Your query is not properly formatted. Imbecile")
 			return
 		}
-		youtubeURL := splitMessage[2]
+		youtubeURL := messageWithoutUserMentionsCaseSensitive[2]
 		if !(strings.Contains(youtubeURL, "https") || strings.Contains(youtubeURL, "youtube")) {
 			s.ChannelMessageSend(m.ChannelID, "Not a youtube vid. fuck off")
 			return
