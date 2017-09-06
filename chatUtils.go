@@ -23,7 +23,7 @@ func setHandlers(discordSession *discordgo.Session) {
 func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 	messageWithoutUserMentions := strings.ToLower(m.ContentWithMentionsReplaced())
-	messageWithoutUserMentionsCaseSensitive := strings.Fields(strings.ToLower(m.ContentWithMentionsReplaced()))
+	messageWithoutUserMentionsCaseSensitive := strings.Fields(m.ContentWithMentionsReplaced())
 
 	fmt.Printf("Message is '%s' from '%s'\n", messageWithoutUserMentions, m.Author.Username)
 
