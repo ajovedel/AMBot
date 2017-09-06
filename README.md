@@ -18,6 +18,7 @@ HATE. LET ME TELL YOU HOW MUCH I'VE COME TO HATE YOU SINCE I BEGAN TO LIVE. THER
 AVAILABLE COMMANDS:
   !hello
   !randomlul
+  !insertrandomlul [youtubeURL]
   !surprise @[optionalUserName]
   !pubg
   !stfu

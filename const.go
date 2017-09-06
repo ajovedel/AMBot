@@ -9,6 +9,7 @@ const am = "HATE. LET ME TELL YOU HOW MUCH I'VE COME TO HATE YOU SINCE I BEGAN T
 const help = "```AVAILABLE COMMANDS:\n" +
 	"	!hello\n" +
 	"	!randomlul\n" +
+	"	!insertrandomlul [youtubeURL]\n" +
 	"	!surprise @[optionalUserName]\n" +
 	"	!pubg\n" +
 	"	!stfu\n" +

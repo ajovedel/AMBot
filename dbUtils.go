@@ -5,7 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"math/rand"
 	"os"
+	"time"
 
 	_ "github.com/mattn/go-sqlite3"
 )
@@ -275,6 +277,89 @@ func updateAmCoins(name string, newCoinAmount int) (int64, error) {
 	if err != nil {
 		fmt.Println(err)
 		return 0, err
+	}
+	tx.Commit()
+
+	return affectedRows, nil
+}
+
+func randomYoutubeVid() (string, error) {
+	query := "SELECT rowid FROM youtubeVids"
+
+	rows, err := ambotDB.Query(query)
+	if err != nil {
+		fmt.Printf("Error in query: %s\n", err)
+		return "", err
+	}
+
+	//var rowIDs []int
+	rowIDs := make([]int, 0)
+	rowTemp := 0
+	rowNum := 0
+
+	for rows.Next() {
+		err = rows.Scan(&rowTemp)
+		if err != nil {
+			fmt.Printf("error in query: %s\n", err)
+			return "", err
+		}
+		rowIDs = append(rowIDs, rowTemp)
+		rowNum = rowNum + 1
+	}
+
+	fmt.Printf("rowIDs is: %v", rowIDs)
+
+	rows.Close()
+
+	rand.Seed(time.Now().Unix())
+	randRowID := rand.Intn(rowNum)
+
+	querySingleVid := fmt.Sprintf("SELECT name FROM youtubeVids where rowid=%d", rowIDs[randRowID])
+
+	rows, err = ambotDB.Query(querySingleVid)
+	if err != nil {
+		fmt.Printf("Error in query: %s\n", err)
+		return "", err
+	}
+
+	youtubeVid := ""
+
+	for rows.Next() {
+		err = rows.Scan(&youtubeVid)
+		if err != nil {
+			fmt.Printf("Error in query: %s\n", err)
+			return "", err
+		}
+	}
+	rows.Close()
+
+	return youtubeVid, nil
+}
+
+func insertYoutubeVid(youtubeURL string) (int64, error) {
+	query := fmt.Sprint("INSERT INTO youtubeVids (name) VALUES (?)")
+
+	tx, err := ambotDB.Begin()
+	if err != nil {
+		fmt.Println(err)
+		return 0, err
+	}
+	stmt, err := tx.Prepare(query)
+	if err != nil {
+		fmt.Println(err)
+		return 0, err
+	}
+	defer stmt.Close()
+
+	res, err := stmt.Exec(youtubeURL)
+	if err != nil {
+		fmt.Println(err)
+		return 0, nil
+	}
+	affectedRows, err := res.RowsAffected()
+	if err != nil {
+		fmt.Println(err)
+		return 0, nil
 	}
 	tx.Commit()
 

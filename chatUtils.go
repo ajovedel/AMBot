@@ -103,9 +103,34 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		}
 		s.ChannelMessageSend(m.ChannelID, "Request has been logged and will be reviewed.")
 
+	/***** PLAY RANDOM YOUTUBE VID *****/
 	case "!randomlul":
-		rand.Seed(time.Now().Unix())
-		s.ChannelMessageSend(m.ChannelID, lulPlaylist[rand.Intn(len(lulPlaylist))])
+		youtubeVid, err := randomYoutubeVid()
+		fmt.Printf("youtube vid is: %s\n", youtubeVid)
+		if err != nil {
+			fmt.Printf("Error is: %s\n", err)
+			return
+		}
+		s.ChannelMessageSend(m.ChannelID, youtubeVid)
+
+	/***** INSERT YOUTUBE VID INTO DB*****/
+	case "!insertrandomlul":
+		if len(splitMessage) != 3 {
+			s.ChannelMessageSend(m.ChannelID, "Your query is not properly formatted. Imbecile")
+			return
+		}
+		youtubeURL := splitMessage[2]
+		if strings.Contains(youtubeURL, "https") || strings.Contains(youtubeURL, "youtube") {
+			s.ChannelMessageSend(m.ChannelID, "Not a youtube vid. fuck off")
+			return
+		}
+		success, err := insertYoutubeVid(youtubeURL)
+		if err != nil || success != 1 {
+			s.ChannelMessageSend(m.ChannelID, "Something went wrong.")
+			return
+		}
+
+		s.ChannelMessageSend(m.ChannelID, "Youtube vid added to database.")
 
 	/***** YOUTUBE STREAMING *****/
 	case "!youtube":
