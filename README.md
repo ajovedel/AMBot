@@ -18,11 +18,11 @@ HATE. LET ME TELL YOU HOW MUCH I'VE COME TO HATE YOU SINCE I BEGAN TO LIVE. THER
 AVAILABLE COMMANDS:
   !hello
   !randomlul
-  !insertrandomlul [youtubeURL]
-  !surprise @[optionalUserName]
   !pubg
   !stfu
   !8ball
+  !insertrandomlul [youtubeURL]
+  !surprise @[optionalUserName]
   !roll [maxRollNumber]
   !request [yourRequest]
   !youtube [youtubeURL]
@@ -30,7 +30,7 @@ AVAILABLE COMMANDS:
   !text @[discordUserName] [messageBody]
   bets:
     !show-bets
-	  !place-bet [betID] [CoinAmount] [outcome]
-	  !create-bet [betDescription] [Outcome1 | Outcome 2 | ... | Outcome N]
-	  !wallet
+    !place-bet [betID] [CoinAmount] [outcome]
+    !create-bet [betDescription] [Outcome1 | Outcome 2 | ... | Outcome N]
+    !wallet
 ```
