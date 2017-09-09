@@ -85,7 +85,6 @@ func loadYoutube(url string) error {
 func convertToOpus(rd io.Reader) (io.Reader, error) {
 
 	// Convert to a format that can be passed to dca-rs
-	fmt.Printf("runtime is: %s\n", runtime.GOOS)
 	ffmpeg := exec.Command("ffmpeg", "-i", "pipe:0", "-f", "s16le", "-ar", "48000", "-ac", "2", "pipe:1")
 	ffmpeg.Stdin = rd
 	ffmpegout, err := ffmpeg.StdoutPipe()
@@ -125,7 +124,6 @@ func convertToOpus(rd io.Reader) (io.Reader, error) {
 	}
 
 	// Returns a stream of opus data
-	fmt.Printf("Im in covertToOpus\n")
 	return dcabuf, nil
 }
 

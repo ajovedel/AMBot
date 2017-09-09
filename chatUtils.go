@@ -25,7 +25,7 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 	messageWithoutUserMentions := strings.ToLower(m.ContentWithMentionsReplaced())
 	messageWithoutUserMentionsCaseSensitive := strings.Fields(m.ContentWithMentionsReplaced())
 
-	fmt.Printf("Message is '%s' from '%s'\n", messageWithoutUserMentions, m.Author.Username)
+	fmt.Printf("\x1b[32m%s\x1b[0m: %s\n", m.Author.Username, messageWithoutUserMentions)
 
 	// ignore message posted by AM
 	if m.Author.ID == s.State.User.ID {
@@ -57,7 +57,6 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	messageCommand := splitMessage[1]
-	fmt.Printf("command is %s\n", messageCommand)
 
 	// get channel and guild
 	msgChannel, err := s.State.Channel(m.ChannelID)
@@ -72,8 +71,6 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		fmt.Printf("Err is: %s\n", err)
 		return
 	}
-
-	fmt.Printf("Message received: %s: %s \n", m.Author.ID, messageWithoutUserMentions)
 
 	// check message and reply/react to message
 	/***** HELLO *****/
@@ -164,7 +161,10 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 					if err != nil {
 						if err == io.ErrUnexpectedEOF || err == io.EOF {
 							fmt.Printf("ERR is: %s", err)
-							//s.VoficeReady = false
+							vc.Disconnect()
+							break
+						} else if err != nil {
+							fmt.Printf("Weird error returned from readOpus: %s\n", err)
 							vc.Disconnect()
 							break
 						}
