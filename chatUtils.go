@@ -376,6 +376,10 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		rand.Seed(time.Now().Unix())
 		s.ChannelMessageSend(m.ChannelID, eightBallAnswers[rand.Intn(len(eightBallAnswers))])
 
+	/***** DONATE *****/
+	case "!donate":
+		s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Please donate Ƀ at: `%s`\n", BCAddress))
+
 	default:
 		fmt.Printf("Command not found\n")
 		s.ChannelMessageSend(m.ChannelID, "wat")

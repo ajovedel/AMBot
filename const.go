@@ -12,6 +12,7 @@ const help = "```AVAILABLE COMMANDS:\n" +
 	"	!pubg\n" +
 	"	!stfu\n" +
 	"	!8ball\n" +
+	"   !donate\n" +
 	"	!insertrandomlul [youtubeURL]\n" +
 	"	!surprise @[optionalUserName]\n" +
 	"	!roll [maxRollNumber]\n" +
@@ -24,6 +25,8 @@ const help = "```AVAILABLE COMMANDS:\n" +
 	"		!place-bet [betID] [CoinAmount] [outcome]\n" +
 	"		!create-bet [betDescription] [Outcome1 | Outcome 2 | ... | Outcome N]\n" +
 	"		!wallet\n```"
+
+const BCAddress = "14TVprtmpx6jot2Yp5ueCi6xaJGCZ7ApQp"
 
 var directory = map[string]string{
 	"@ans":      "+17873637400",
