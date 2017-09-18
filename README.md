@@ -1,3 +1,4 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/ajovedel/AMBot)](https://goreportcard.com/report/github.com/ajovedel/AMBot)
 # AMBot
 
 I am A.M.
