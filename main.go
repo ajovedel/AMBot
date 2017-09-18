@@ -11,7 +11,8 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-const Version = "v0.0.3-alpha"
+// Version is the current ambot version
+const Version = "v0.0.4-alpha"
 
 var discordSession, _ = discordgo.New()
 

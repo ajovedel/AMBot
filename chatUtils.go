@@ -219,9 +219,8 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if !textSuccess {
 			s.ChannelMessageSend(m.ChannelID, "User not found in directory. Fool.")
 			return
-		} else {
-			s.ChannelMessageSend(m.ChannelID, "Message sent.")
 		}
+		s.ChannelMessageSend(m.ChannelID, "Message sent.")
 
 	/*** AIRHORN USER ***/
 	case "!surprise":

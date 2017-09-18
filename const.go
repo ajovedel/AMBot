@@ -26,6 +26,7 @@ const help = "```AVAILABLE COMMANDS:\n" +
 	"		!create-bet [betDescription] [Outcome1 | Outcome 2 | ... | Outcome N]\n" +
 	"		!wallet\n```"
 
+// BCAddress is the bitcoin donation address
 const BCAddress = "14TVprtmpx6jot2Yp5ueCi6xaJGCZ7ApQp"
 
 var directory = map[string]string{

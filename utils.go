@@ -99,7 +99,7 @@ func convertToOpus(rd io.Reader) (io.Reader, error) {
 	} else if runtime.GOOS == "linux" {
 		dcaBinary = "dependencies/linux-bin/dca-rs"
 	} else {
-		fmt.Printf("dca-rs not compatiable with current OS (osx and linux currently supported)\n")
+		fmt.Printf("dca-rs not compatible with current OS (osx and linux currently supported)\n")
 	}
 
 	// Convert to opus
