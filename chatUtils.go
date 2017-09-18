@@ -167,6 +167,10 @@ func messageListenAndRespond(s *discordgo.Session, m *discordgo.MessageCreate) {
 							fmt.Printf("Weird error returned from readOpus: %s\n", err)
 							vc.Disconnect()
 							break
+						} else if len(opus) == 0 {
+							fmt.Printf("Weird error, read 0 bytes")
+							vc.Disconnect()
+							break
 						}
 						fmt.Println("Audio error: ", err)
 					}
