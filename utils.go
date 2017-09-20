@@ -203,11 +203,13 @@ func setAirhornHandler(s *discordgo.Session) {
 		}
 
 		user := make([]byte, 1024)
-		userNameLen := bytes.Index(user, []byte{0})
-		userID := discordUserIDs[string(user[:userNameLen])]
 
 		conn.Read(user)
 		fmt.Printf("user is: %s\n", user)
+		userNameLen := bytes.Index(user, []byte{0})
+		userID := discordUserIDs[string(user[:userNameLen])]
+		fmt.Printf("userNameLen is: %s\n", userNameLen)
+		fmt.Printf("userID is: %s\n", userID)
 
 		guildID := "175816658663768064"
 		msgGuild, err := s.State.Guild(guildID)
