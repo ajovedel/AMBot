@@ -202,14 +202,12 @@ func setAirhornHandler(s *discordgo.Session) {
 			fmt.Printf("Error setting up airhornhandler: %s\n", err)
 		}
 
+		go func() {
 		user := make([]byte, 1024)
-
 		conn.Read(user)
-		fmt.Printf("user is: %s\n", user)
+		conn.Close()
 		userNameLen := bytes.Index(user, []byte{0})
 		userID := discordUserIDs[string(user[:userNameLen])]
-		fmt.Printf("userNameLen is: %s\n", userNameLen)
-		fmt.Printf("userID is: %s\n", userID)
 
 		guildID := "175816658663768064"
 		msgGuild, err := s.State.Guild(guildID)
@@ -219,7 +217,6 @@ func setAirhornHandler(s *discordgo.Session) {
 		}
 
 		for _, vs := range msgGuild.VoiceStates {
-			fmt.Printf("vs.UserID %s\n", vs.UserID)
 			if vs.UserID == userID {
 				err = playSound(s, guildID, vs.ChannelID)
 				if err != nil {
@@ -227,6 +224,7 @@ func setAirhornHandler(s *discordgo.Session) {
 				}
 			}
 		}
+	}
 
 	}
 }
