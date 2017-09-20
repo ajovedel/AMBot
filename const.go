@@ -74,6 +74,9 @@ var eightBallAnswers = [...]string{
 	"Very doubtful",
 }
 
-var discordUserIDs = [...]string{
-	"177636452522262528",
+var discordUserIDs = map[string]string{
+	"berserk": "177636452522262528",
+	"genex":   "171838910085726208",
+	"lobito":  "179744980523417600",
+	"nonix":   "188119456663207937",
 }

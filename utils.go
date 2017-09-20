@@ -203,6 +203,8 @@ func setAirhornHandler(s *discordgo.Session) {
 		}
 
 		user := make([]byte, 1024)
+		userNameLen := bytes.Index(user, []byte{0})
+		userID := discordUserIDs[string(user[:userNameLen])]
 
 		conn.Read(user)
 		fmt.Printf("user is: %s\n", user)
@@ -216,7 +218,7 @@ func setAirhornHandler(s *discordgo.Session) {
 
 		for _, vs := range msgGuild.VoiceStates {
 			fmt.Printf("vs.UserID %s\n", vs.UserID)
-			if vs.UserID == discordUserIDs[0] {
+			if vs.UserID == userID {
 				err = playSound(s, guildID, vs.ChannelID)
 				if err != nil {
 					fmt.Printf("ERR is: %s", err)
