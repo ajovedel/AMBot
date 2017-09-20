@@ -78,6 +78,9 @@ func main() {
 	// set our fancy handlers
 	setHandlers(discordSession)
 
+	// set our airhorn handler
+	setAirhornHandler(discordSession)
+
 	// Wait for a CTRL-C
 	log.Printf(`Now running. Press CTRL-C to exit.`)
 	sc := make(chan os.Signal, 1)

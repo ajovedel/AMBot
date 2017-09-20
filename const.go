@@ -73,3 +73,7 @@ var eightBallAnswers = [...]string{
 	"Outlook not so good",
 	"Very doubtful",
 }
+
+var discordUserIDs = [...]string{
+	"177636452522262528",
+}

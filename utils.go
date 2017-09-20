@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"net"
 	"os"
 	"os/exec"
 	"runtime"
@@ -186,4 +187,41 @@ func joinUserVoiceChannel(session *discordgo.Session, userID string) (*discordgo
 
 	// Join the user's channel and start unmuted and deafened.
 	return session.ChannelVoiceJoin(vs.GuildID, vs.ChannelID, false, true)
+}
+
+func setAirhornHandler(s *discordgo.Session) {
+	ln, err := net.Listen("tcp", "127.0.0.1:7234")
+	if err != nil {
+		fmt.Printf("Error setting up airhornhandler: %s\n", err)
+	}
+
+	for {
+		conn, err := ln.Accept()
+		if err != nil {
+			fmt.Printf("Error setting up airhornhandler: %s\n", err)
+		}
+
+		user := make([]byte, 1024)
+
+		conn.Read(user)
+		fmt.Printf("user is: %s\n", user)
+
+		guildID := "175816658663768064"
+		msgGuild, err := s.State.Guild(guildID)
+		if err != nil {
+			fmt.Printf("Err is: %s\n", err)
+			return
+		}
+
+		for _, vs := range msgGuild.VoiceStates {
+			fmt.Printf("vs.UserID %s\n", vs.UserID)
+			if vs.UserID == discordUserIDs[0] {
+				err = playSound(s, guildID, vs.ChannelID)
+				if err != nil {
+					fmt.Printf("ERR is: %s", err)
+				}
+			}
+		}
+
+	}
 }
