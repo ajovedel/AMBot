@@ -190,6 +190,7 @@ func joinUserVoiceChannel(session *discordgo.Session, userID string) (*discordgo
 }
 
 func setAirhornHandler(s *discordgo.Session) {
+	fmt.Println("hereiam")
 	ln, err := net.Listen("tcp", "127.0.0.1:7234")
 	if err != nil {
 		fmt.Printf("Error setting up airhornhandler: %s\n", err)
