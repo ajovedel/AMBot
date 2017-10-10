@@ -75,6 +75,7 @@ var eightBallAnswers = [...]string{
 }
 
 var discordUserIDs = map[string]string{
+	"axel": "192099988384251904",
 	"berserk": "177636452522262528",
 	"genex":   "171838910085726208",
 	"lobito":  "179744980523417600",
