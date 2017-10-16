@@ -72,7 +72,7 @@ var eightBallAnswers = [...]string{
 	"My sources say no",
 	"Outlook not so good",
 	"Very doubtful",
-        "¯\\_(ツ)_/¯"
+        "¯\\_(ツ)_/¯",
 }
 
 var discordUserIDs = map[string]string{
