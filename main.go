@@ -75,8 +75,11 @@ func main() {
 		return
 	}
 
-	// set our fancy handlers
+	// set our discord fancy handlers
 	setHandlers(discordSession)
+
+	// set twitter handler and listen for new messages
+	go setTwitterHandlers(discordSession)
 
 	// set our airhorn handler
 	setAirhornHandler(discordSession)
