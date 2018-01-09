@@ -14,6 +14,7 @@ func setTwitterHandlers(discordSession *discordgo.Session) {
 
 	config := oauth1.NewConfig("", "")
 	token := oauth1.NewToken("", "")
+
 	httpClient := config.Client(oauth1.NoContext, token)
 
 	client := twitter.NewClient(httpClient)
@@ -25,8 +26,9 @@ func setTwitterHandlers(discordSession *discordgo.Session) {
 	for {
 
 		tweets, _, err := client.Timelines.UserTimeline(&twitter.UserTimelineParams{
-			UserID: trumpTwitterID,
-			Count:  10,
+			UserID:    trumpTwitterID,
+			Count:     10,
+			TweetMode: "extended",
 		})
 
 		if err != nil {
@@ -36,7 +38,8 @@ func setTwitterHandlers(discordSession *discordgo.Session) {
 
 		// loop over tweets in reverse, to post older tweets first and newer tweets last
 		for i := len(tweets) - 1; i >= 0; i-- {
-			fmt.Println(tweets[i])
+			//fmt.Println(tweets[i])
+			fmt.Println(tweets[i].FullText)
 			if checkIfTweetHasBeenPosted(tweets[i].ID) {
 				continue
 			} else {
@@ -110,7 +113,7 @@ func postTweet(discordSession *discordgo.Session, tweet twitter.Tweet) {
 		return
 	}
 
-	_, err = discordSession.ChannelMessageSend("348922901531066371", tweet.Text)
+	_, err = discordSession.ChannelMessageSend("348922901531066371", tweet.FullText)
 	if err != nil {
 		log.Printf("Derp, %s", err)
 	}
