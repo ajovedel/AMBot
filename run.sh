@@ -1,6 +1,6 @@
 #!/bin/sh
 
-git pull
+#git pull
 #go get -u -v all
 go build -v
 ./AMBot
